@@ -1,0 +1,66 @@
+body {
+  color: rgb(0, 0, 0);
+  font-family: Arial, sans-serif;
+  margin: 0;
+}
+
+/* Center only the Auth page */
+.auth-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: rgb(255, 255, 255);
+}
+
+/* Center the auth box */
+.auth-container {
+  width: 350px;
+  padding: 20px;
+  background: #222;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
+}
+
+.auth-container h2{
+  color: #fff;
+}
+
+/* Inputs and buttons full width */
+.auth-container input, .auth-container button {
+  width: 80%;
+  padding: 10px;
+  margin: 10px auto;
+  border-radius: 5px;
+  border: none;
+}
+
+/* Style buttons */
+button {
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+/* Google Button Fix */
+.google-btn {
+  background: red;
+  width: 100%;
+  margin-top: 10px;
+  display: block;
+}
+
+/* Make links interactive */
+.forgot-password, .toggle-auth {
+  cursor: pointer;
+  color: cyan;
+  display: block;
+  margin-top: 10px;
+}
