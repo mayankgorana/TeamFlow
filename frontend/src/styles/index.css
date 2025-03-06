@@ -1,30 +1,21 @@
 body {
   color: rgb(0, 0, 0);
   font-family: Arial, sans-serif;
-  margin: 0;
-}
-
-/* Center only the Auth page */
-.auth-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   height: 100vh;
-  background: rgb(255, 255, 255);
+  margin: 0;
+  background-color: black;
 }
 
 /* Center the auth box */
 .auth-container {
-  width: 350px;
+  width: 100%;
+  max-width: 350px;
   padding: 20px;
   background: #222;
   border-radius: 8px;
   text-align: center;
   box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
-}
-
-.auth-container h2{
-  color: #fff;
+  margin: 10px;
 }
 
 /* Inputs and buttons full width */
@@ -63,4 +54,20 @@ button:hover {
   color: cyan;
   display: block;
   margin-top: 10px;
+}
+
+/* Media Query for Mobile Devices */
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+
+  .auth-container {
+    width: 90%;
+    padding: 15px;
+  }
+
+  .auth-container input, .auth-container button {
+    width: 90%;
+  }
 }
