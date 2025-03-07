@@ -3,6 +3,7 @@ import Login from "../components/Login";
 import Register from "../components/Register";
 import ResetPassword from "../components/ResetPassword";
 import GoogleSignIn from "../components/GoogleSignIn";
+import "../styles/Auth.css"
 
 const Auth = () => {
   const [authType, setAuthType] = useState("login");

@@ -1,0 +1,217 @@
+/* Dashboard Layout */
+.dashboard {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  background: #333;
+  color: white;
+  padding: 20px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* TeamFlow Title */
+.sidebar h2 {
+  margin-bottom: 20px;
+}
+
+/* Sidebar Navigation */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  margin: 10px 0;
+}
+
+.sidebar ul li a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.sidebar ul li a:hover {
+  background: #444;
+}
+
+/* Logout Button (Push to Bottom) */
+.sidebar button {
+  margin-top: auto;  /* This pushes it to the bottom */
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+/* Main Content (Full Width) */
+.main-content {
+  flex-grow: 1;  /* Takes full width */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Aligns content normally */
+  padding: 20px;
+}
+
+/* Center Only the Title */
+.main-content h1 {
+  text-align: center;
+  width: 100%;  /* Ensures full width for proper centering */
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+
+/* Task Page */
+/* Main Task Container */
+.tasks-container {
+  width: 80%;
+  margin: 20px auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Title Styling */
+.task-title {
+  text-align: center;
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Task Input Section */
+.task-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.task-input input {
+  flex: 2;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.task-input select {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  margin: 0 10px;
+}
+
+.task-input button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: #007bff;
+  color: white;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.task-input button:hover {
+  background: #0056b3;
+}
+
+/* Task List */
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Individual Task Item */
+.task {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  transition: 0.3s;
+}
+
+/* Task Priority Colors */
+.task.high {
+  border-left: 5px solid red;
+}
+
+.task.medium {
+  border-left: 5px solid orange;
+}
+
+.task.low {
+  border-left: 5px solid green;
+}
+
+/* Task Text */
+.task p {
+  flex: 1;
+  margin: 0;
+  font-size: 16px;
+}
+
+/* Status Dropdown */
+.task select {
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+/* Delete Button Styling (Material-UI Override) */
+/* Task Actions (Dropdown & Delete Button) */
+.task-actions {
+  display: flex;
+  align-items: center;  /* Align items vertically */
+  gap: 10px; /* Spacing between elements */
+}
+
+/* Delete Button Styling */
+.delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.delete-btn svg {
+  font-size: 24px;
+  color: red;
+  transition: color 0.2s ease;
+}
+
+.delete-btn:hover{
+  transform: scale(1.1);
+  background: rgba(255, 0, 0, 0.1); 
+  border-radius: 5px; 
+}
+
+.delete-btn:hover svg {
+  color: darkred;
+}
