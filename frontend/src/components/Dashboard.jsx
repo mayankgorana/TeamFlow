@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, logout } from "../firebase/firebase";
-import Tasks from "./Tasks"; // Import Tasks component
+import Tasks from "./Tasks";
 import "../styles/Dashboard.css";
 
 const Dashboard = () => {
