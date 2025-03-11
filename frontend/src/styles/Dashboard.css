@@ -87,8 +87,8 @@
 /* Title Styling */
 .task-title {
   text-align: center;
-  font-size: 24px;
   color: #333;
+  font-size: 40px !important;
   margin-bottom: 20px;
 }
 
@@ -168,7 +168,7 @@
 /* Task Text */
 .task p {
   flex: 1;
-  margin: 0;
+  margin: 10px 0;
   font-size: 16px;
   color: #000000;
 }
@@ -230,16 +230,18 @@
   padding: 2px 8px;
   border-radius: 3px;
   color: white;
+  width: 50px;
+  text-align: center;
 }
 
 .high {
-  background: rgba(255, 14, 14, 0.26);
+  background: rgba(255, 14, 14, 0.128);
 }
 
 .medium {
-  background: rgba(255, 182, 47, 0.345);
+  background: rgba(255, 182, 47, 0.242);
 }
 
 .low {
-  background: rgba(22, 184, 22, 0.299);
+  background: rgba(22, 184, 22, 0.224);
 }

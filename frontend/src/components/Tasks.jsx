@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { db, auth } from "../firebase/firebase";
-import { collection, addDoc, query, where, getDocs, updateDoc, deleteDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+  updateDoc,
+  deleteDoc,
+  doc,
+  arrayUnion,
+} from "firebase/firestore";
 import "../styles/Dashboard.css";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -10,48 +20,86 @@ const Tasks = () => {
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("Medium");
   const [teamId, setTeamId] = useState(null);
+  const [teams, setTeams] = useState([]); // Store list of teams
+  const [newTeamName, setNewTeamName] = useState(""); // For creating new teams
 
+  // Fetch user teams on authentication
   useEffect(() => {
-    if (!auth.currentUser) return;
-    fetchTeam();
-  }, [auth.currentUser]);
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) fetchTeams(user.uid);
+    });
+    return () => unsubscribe();
+  }, []);
 
-  // Fetch team where the current user is a member
-  const fetchTeam = async () => {
-    if (!auth.currentUser) return;
+  // Fetch all teams where user is a member
+  const fetchTeams = async (userId) => {
+    if (!userId) return;
 
-    const q = query(collection(db, "teams"), where("members", "array-contains", auth.currentUser.uid));
+    const q = query(collection(db, "teams"), where("members", "array-contains", userId));
     const querySnapshot = await getDocs(q);
+    
+    const userTeams = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
 
-    if (!querySnapshot.empty) {
-      const teamDoc = querySnapshot.docs[0]; // Assuming user is in one team
-      setTeamId(teamDoc.id);
-      fetchTasks(teamDoc.id);
+    setTeams(userTeams);
+
+    if (userTeams.length > 0) {
+      setTeamId(userTeams[0].id);
+      fetchTasks(userTeams[0].id);
     }
   };
 
-  // Fetch tasks from Firestore for the team
+  // Create a new team
+  const createTeam = async () => {
+    if (newTeamName.trim() === "") return;
+
+    const teamData = {
+      name: newTeamName,
+      members: [auth.currentUser.uid],
+    };
+
+    const teamRef = await addDoc(collection(db, "teams"), teamData);
+    setTeams([...teams, { id: teamRef.id, ...teamData }]);
+    setNewTeamName(""); // Clear input
+  };
+
+  // Switch team and fetch tasks
+  const switchTeam = (id) => {
+    setTeamId(id);
+    fetchTasks(id);
+  };
+
+  // Fetch tasks for the selected team
   const fetchTasks = async (teamId) => {
     if (!teamId) return;
 
-    const q = collection(db, "teams", teamId, "tasks");
-    const querySnapshot = await getDocs(q);
-    setTasks(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    const tasksCollectionRef = collection(db, `teams/${teamId}/tasks`);
+    const querySnapshot = await getDocs(tasksCollectionRef);
+    
+    const fetchedTasks = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+      priority: doc.data().priority || "Medium",
+    }));
+
+    setTasks(fetchedTasks);
   };
 
-  // Add new task to the team
+  // Add a new task
   const addTask = async () => {
     if (newTask.trim() === "" || description.trim() === "" || !teamId) return;
 
     const taskData = {
       title: newTask,
       description,
-      priority,
+      priority: priority || "Medium",
       status: "To-Do",
-      assignedTo: null, // Can assign later
+      assignedTo: null,
     };
 
-    await addDoc(collection(db, "teams", teamId, "tasks"), taskData);
+    await addDoc(collection(db, `teams/${teamId}/tasks`), taskData);
     setNewTask("");
     setDescription("");
     fetchTasks(teamId);
@@ -61,17 +109,21 @@ const Tasks = () => {
   const changeStatus = async (id, newStatus) => {
     if (!teamId) return;
 
-    const taskRef = doc(db, "teams", teamId, "tasks", id);
+    const taskRef = doc(db, `teams/${teamId}/tasks`, id);
     await updateDoc(taskRef, { status: newStatus });
 
-    setTasks(tasks.map(task => task.id === id ? { ...task, status: newStatus } : task));
+    setTasks(
+      tasks.map((task) =>
+        task.id === id ? { ...task, status: newStatus } : task
+      )
+    );
   };
 
-  // Delete task
+  // Delete a task
   const deleteTask = async (id) => {
     if (!teamId) return;
 
-    await deleteDoc(doc(db, "teams", teamId, "tasks", id));
+    await deleteDoc(doc(db, `teams/${teamId}/tasks`, id));
     fetchTasks(teamId);
   };
 
@@ -79,8 +131,38 @@ const Tasks = () => {
     <div className="tasks-container">
       <h1 className="task-title">Team Task Management</h1>
 
+      {/* Create & Switch Teams */}
+      <div className="team-management">
+        <h2>Teams</h2>
+
+        {/* Create New Team - Styled Same as Task Input */}
+        <div className="task-input">
+          <input
+            type="text"
+            placeholder="Enter new team name..."
+            value={newTeamName}
+            onChange={(e) => setNewTeamName(e.target.value)}
+            className="input-field"
+          />
+          <button onClick={createTeam} className="add-task-btn">Create Team</button>
+          <select
+            onChange={(e) => switchTeam(e.target.value)}
+            value={teamId || ""}
+            className="input-field"
+          >
+            {teams.map((team) => (
+              <option key={team.id} value={team.id}>
+                {team.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+      </div> 
+      <h2>Add Task</h2>
       {/* Add New Task */}
       <div className="task-input">
+        
         <input
           type="text"
           placeholder="Enter task title..."
@@ -106,17 +188,27 @@ const Tasks = () => {
         {tasks.map((task) => (
           <div key={task.id} className={`task ${task.priority.toLowerCase()}`}>
             <div className="task-details">
-              <p className="task-title-text"><strong>{task.title}</strong></p>
+              <p className="task-title-text">
+                <strong>{task.title}</strong>
+              </p>
               <p className="task-desc">{task.description}</p>
-              <p className={`priority ${task.priority.toLowerCase()}`}>{task.priority}</p>
+              <p className={`priority ${task.priority.toLowerCase()}`}>
+                {task.priority}
+              </p>
             </div>
             <div className="task-actions">
-              <select onChange={(e) => changeStatus(task.id, e.target.value)} value={task.status}>
+              <select
+                onChange={(e) => changeStatus(task.id, e.target.value)}
+                value={task.status}
+              >
                 <option value="To-Do">To-Do</option>
                 <option value="In Progress">In Progress</option>
                 <option value="Completed">Completed</option>
               </select>
-              <button className="delete-btn" onClick={() => deleteTask(task.id)}>
+              <button
+                className="delete-btn"
+                onClick={() => deleteTask(task.id)}
+              >
                 <DeleteIcon />
               </button>
             </div>
@@ -128,3 +220,4 @@ const Tasks = () => {
 };
 
 export default Tasks;
+2
