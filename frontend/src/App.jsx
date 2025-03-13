@@ -11,8 +11,8 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={user ? <Dashboard /> :<Auth />} />
-        <Route path="/dashboard" element={user ? <Dashboard /> : <Auth/>} />
+        <Route path="/" element={user ? <Dashboard /> : <Auth />} />
+        <Route path="/dashboard" element={user ? <Dashboard /> : <Auth />} />
       </Routes>
     </Router>
   );

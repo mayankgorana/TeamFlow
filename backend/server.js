@@ -1,33 +1,38 @@
 import express from "express";
-import dotenv from "dotenv";
-import mongoose from "mongoose";
+import http from "http";
+import { Server } from "socket.io";
 import cors from "cors";
-import taskRoutes from "./routes/TaskRoutes.js"; 
-
-dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const server = http.createServer(app);
 
-// Middleware
-app.use(express.json());
-app.use(cors());
-
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log("MongoDB Connected"))
-.catch((err) => console.error("MongoDB Connection Error:", err));
-
-// Routes
-app.use("/tasks", taskRoutes); //
-
-app.get("/", (req, res) => {
-  res.send("Server is running...");
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173", // Change this to your frontend URL
+    methods: ["GET", "POST"],
+  },
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+io.on("connection", (socket) => {
+  console.log("User connected:", socket.id);
+
+  // Join a chat room
+  socket.on("joinRoom", (teamId) => {
+    socket.join(teamId);
+    console.log(`User ${socket.id} joined room ${teamId}`);
+  });
+
+  // Handle incoming messages
+  socket.on("sendMessage", ({ teamId, userId, message }) => {
+    const chatMessage = { userId, message, timestamp: new Date() };
+    io.to(teamId).emit("receiveMessage", chatMessage);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("User disconnected:", socket.id);
+  });
+});
+
+server.listen(5000, () => {
+  console.log("WebSocket Server running on port 5000");
 });

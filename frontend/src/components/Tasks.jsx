@@ -32,22 +32,18 @@ const Tasks = () => {
   }, []);
 
   // Fetch all teams where user is a member
-  const fetchTeams = async (userId) => {
-    if (!userId) return;
+  const fetchTeams = async () => {
+    const querySnapshot = await getDocs(collection(db, "teams"));
 
-    const q = query(collection(db, "teams"), where("members", "array-contains", userId));
-    const querySnapshot = await getDocs(q);
-    
-    const userTeams = querySnapshot.docs.map((doc) => ({
+    const allTeams = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
 
-    setTeams(userTeams);
+    setTeams(allTeams);
 
-    if (userTeams.length > 0) {
-      setTeamId(userTeams[0].id);
-      fetchTasks(userTeams[0].id);
+    if (allTeams.length > 0) {
+      fetchTasks(allTeams);
     }
   };
 
@@ -74,18 +70,19 @@ const Tasks = () => {
   // Fetch tasks for the selected team
   const fetchTasks = async (teamId) => {
     if (!teamId) return;
-
+  
     const tasksCollectionRef = collection(db, `teams/${teamId}/tasks`);
     const querySnapshot = await getDocs(tasksCollectionRef);
-    
+  
     const fetchedTasks = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
-      priority: doc.data().priority || "Medium",
+      teamId: teamId, // Ensure tasks are assigned to the correct team
     }));
-
+  
     setTasks(fetchedTasks);
   };
+  
 
   // Add a new task
   const addTask = async () => {
@@ -144,7 +141,9 @@ const Tasks = () => {
             onChange={(e) => setNewTeamName(e.target.value)}
             className="input-field"
           />
-          <button onClick={createTeam} className="add-task-btn">Create Team</button>
+          <button onClick={createTeam} className="add-task-btn">
+            Create Team
+          </button>
           <select
             onChange={(e) => switchTeam(e.target.value)}
             value={teamId || ""}
@@ -157,12 +156,10 @@ const Tasks = () => {
             ))}
           </select>
         </div>
-
-      </div> 
+      </div>
       <h2>Add Task</h2>
       {/* Add New Task */}
       <div className="task-input">
-        
         <input
           type="text"
           placeholder="Enter task title..."
@@ -185,39 +182,50 @@ const Tasks = () => {
 
       {/* Task List */}
       <div className="task-list">
-        {tasks.map((task) => (
-          <div key={task.id} className={`task ${task.priority.toLowerCase()}`}>
-            <div className="task-details">
-              <p className="task-title-text">
-                <strong>{task.title}</strong>
-              </p>
-              <p className="task-desc">{task.description}</p>
-              <p className={`priority ${task.priority.toLowerCase()}`}>
-                {task.priority}
-              </p>
+        {tasks.map((task, index) => {
+          if (!task || !task.priority) {
+            console.error(`Task at index ${index} is invalid`, task);
+          }
+          return (
+            <div
+              key={task.id}
+              className={`task ${(task.priority || "Medium").toLowerCase()}`}
+            >
+              <div className="task-details">
+                <p className="task-title-text">
+                  <strong>{task.title}</strong>
+                </p>
+                <p className="task-desc">{task.description}</p>
+                <p
+                  className={`priority ${(
+                    task.priority || "Medium"
+                  ).toLowerCase()}`}
+                >
+                  {task.priority || "Medium"}
+                </p>
+              </div>
+              <div className="task-actions">
+                <select
+                  onChange={(e) => changeStatus(task.id, e.target.value)}
+                  value={task.status}
+                >
+                  <option value="To-Do">To-Do</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Completed">Completed</option>
+                </select>
+                <button
+                  className="delete-btn"
+                  onClick={() => deleteTask(task.id)}
+                >
+                  <DeleteIcon />
+                </button>
+              </div>
             </div>
-            <div className="task-actions">
-              <select
-                onChange={(e) => changeStatus(task.id, e.target.value)}
-                value={task.status}
-              >
-                <option value="To-Do">To-Do</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Completed">Completed</option>
-              </select>
-              <button
-                className="delete-btn"
-                onClick={() => deleteTask(task.id)}
-              >
-                <DeleteIcon />
-              </button>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
 };
 
 export default Tasks;
-2

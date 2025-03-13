@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, logout } from "../firebase/firebase";
 import Tasks from "./Tasks";
+import TeamChat from "./TeamChat";
 import "../styles/Dashboard.css";
 
 const Dashboard = () => {
@@ -17,7 +18,7 @@ const Dashboard = () => {
         <ul>
           <li><a href="#" onClick={() => setActivePage("dashboard")}>Dashboard</a></li>
           <li><a href="#" onClick={() => setActivePage("tasks")}>Tasks</a></li>
-          <li><a href="#">Team Chat</a></li>
+          <li><a href="#" onClick={() => setActivePage("team-chat")}>Team Chat</a></li>
           <li><a href="#">Notifications</a></li>
         </ul>
 
@@ -30,6 +31,7 @@ const Dashboard = () => {
       <div className="main-content">
         {activePage === "dashboard" && <h1>Welcome, {user ? user.displayName || user.email : "Guest"}!</h1>}
         {activePage === "tasks" && <Tasks />} {/* Load Tasks Component */}
+        {activePage === "team-chat" && <TeamChat />} {/* Load TeamChat Component */}
       </div>
     </div>
   );
