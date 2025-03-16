@@ -28,14 +28,14 @@
 }
 
 .sidebar ul li {
-  margin: 10px 0;
+  margin: 30px 0;
 }
 
 .sidebar ul li a {
   color: white;
   text-decoration: none;
   display: block;
-  padding: 10px;
+  padding: 2px 0 0 10px;
   border-radius: 5px;
 }
 
@@ -52,6 +52,11 @@
   padding: 10px;
   cursor: pointer;
   border-radius: 5px;
+}
+
+
+.dashboardStyle{
+  display: flex;
 }
 
 /* Main Content (Full Width) */
