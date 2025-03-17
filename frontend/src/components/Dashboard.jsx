@@ -20,13 +20,15 @@ const Dashboard = () => {
       <div className="sidebar">
         <h2>TeamFlow</h2>
         <ul>
-          <li className="dashboardStyle"><DashboardIcon/><a href="#" onClick={() => setActivePage("dashboard")}> Dashboard</a></li>
-          <li className="dashboardStyle"><AssignmentIcon/><a href="#" onClick={() => setActivePage("tasks")}> Tasks</a></li>
-          <li className="dashboardStyle"><GroupsIcon/><a href="#" onClick={() => setActivePage("team-chat")}> Team Chat</a></li>
+          <li ><a href="#" className="dashboardStyle" onClick={() => setActivePage("dashboard")}><DashboardIcon/><span>Dashboard</span> </a></li>
+          <li ><a href="#" className="dashboardStyle" onClick={() => setActivePage("tasks")}><AssignmentIcon/><span>Tasks</span> </a></li>
+          <li ><a href="#" className="dashboardStyle"  onClick={() => setActivePage("team-chat")}><GroupsIcon/> <span>Team Chat</span></a></li>
         </ul>
 
         <button className="logout-button" onClick={() => { logout(); navigate("/"); }}>
-        <LogoutIcon/>  Logout
+        <div className="logout-content">
+        <LogoutIcon/><span>Logout</span>  
+        </div>
         </button>
       </div>
 

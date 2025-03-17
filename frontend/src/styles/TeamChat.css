@@ -81,7 +81,7 @@
   
   .chat-input button {
     padding: 10px 15px;
-    background: #007bff;
+    background: #4f959D;
     color: white;
     border: none;
     font-size: 16px;
@@ -91,6 +91,6 @@
   }
   
   .chat-input button:hover {
-    background: #0056b3;
+    background: #14354f;
   }
   

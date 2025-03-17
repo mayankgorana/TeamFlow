@@ -7,7 +7,7 @@
 /* Sidebar */
 .sidebar {
   width: 250px;
-  background: #333;
+  background: #14354f;
   color: white;
   padding: 20px;
   height: 100vh;
@@ -35,18 +35,18 @@
   color: white;
   text-decoration: none;
   display: block;
-  padding: 2px 0 0 10px;
+  padding: 10px 0 10px 10px;
   border-radius: 5px;
 }
 
 .sidebar ul li a:hover {
-  background: #444;
+  background: #4F959D;
 }
 
 /* Logout Button (Push to Bottom) */
 .sidebar button {
   margin-top: auto;  /* This pushes it to the bottom */
-  background: #007bff;
+  background: #4F959D;
   color: white;
   border: none;
   padding: 10px;
@@ -54,10 +54,25 @@
   border-radius: 5px;
 }
 
+.sidebar button:hover{
+  background: #F6F8D5;
+  color: #000000;
+}
 
 .dashboardStyle{
-  display: flex;
+  display: flex !important;
 }
+
+.dashboardStyle>span{
+  padding: 2px 0 0 5px ;
+}
+
+.logout-content {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
 
 /* Main Content (Full Width) */
 .main-content {
@@ -66,6 +81,7 @@
   flex-direction: column;
   justify-content: flex-start; /* Aligns content normally */
   padding: 20px;
+  background-color: #fefff3;
 }
 
 /* Center Only the Title */
@@ -127,7 +143,7 @@
   flex: 1;
   padding: 10px;
   border: none;
-  background: #007bff;
+  background: #4F959D;
   color: white;
   font-size: 16px;
   border-radius: 5px;
@@ -135,7 +151,7 @@
 }
 
 .task-input button:hover {
-  background: #0056b3;
+  background: #14354f;
 }
 
 /* Task List */
@@ -235,7 +251,7 @@
   padding: 2px 8px;
   border-radius: 3px;
   color: white;
-  width: 50px;
+  width:100px !important;
   text-align: center;
 }
 
@@ -249,4 +265,13 @@
 
 .low {
   background: rgba(22, 184, 22, 0.224);
+}
+
+.options-style{
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  margin: 5px 10px 10px;
 }

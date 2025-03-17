@@ -118,7 +118,7 @@ const TeamChat = () => {
       <h1>Team Chat</h1>
 
       {/* Team Selection */}
-      <select onChange={(e) => setSelectedTeamId(e.target.value)} value={selectedTeamId || ""}>
+      <select className="options-style" onChange={(e) => setSelectedTeamId(e.target.value)} value={selectedTeamId || ""}>
         {teams.map((team) => (
           <option key={team.id} value={team.id}>
             {team.name}

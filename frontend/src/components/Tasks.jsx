@@ -70,19 +70,18 @@ const Tasks = () => {
   // Fetch tasks for the selected team
   const fetchTasks = async (teamId) => {
     if (!teamId) return;
-  
+
     const tasksCollectionRef = collection(db, `teams/${teamId}/tasks`);
     const querySnapshot = await getDocs(tasksCollectionRef);
-  
+
     const fetchedTasks = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
       teamId: teamId, // Ensure tasks are assigned to the correct team
     }));
-  
+
     setTasks(fetchedTasks);
   };
-  
 
   // Add a new task
   const addTask = async () => {
@@ -127,7 +126,6 @@ const Tasks = () => {
   return (
     <div className="tasks-container">
       <h1 className="task-title">Team Task Management</h1>
-
       {/* Create & Switch Teams */}
       <div className="team-management">
         <h2>Teams</h2>
@@ -179,7 +177,7 @@ const Tasks = () => {
         </select>
         <button onClick={addTask}>Add Task</button>
       </div>
-
+      <hr />
       {/* Task List */}
       <div className="task-list">
         {tasks.map((task, index) => {
