@@ -10,7 +10,7 @@ import {
   updateDoc,
   doc,
   setDoc,
-  deleteDoc
+  deleteDoc,
 } from "firebase/firestore";
 import "../styles/TeamChat.css";
 
@@ -87,7 +87,8 @@ const TeamChat = () => {
 
   // Send Message
   const sendMessage = async () => {
-    if (newMessage.trim() === "" || !selectedTeamId || !auth.currentUser) return;
+    if (newMessage.trim() === "" || !selectedTeamId || !auth.currentUser)
+      return;
 
     await addDoc(collection(db, `teams/${selectedTeamId}/messages`), {
       text: newMessage,
@@ -98,15 +99,25 @@ const TeamChat = () => {
     });
 
     setNewMessage(""); // Clear input
-    await deleteDoc(doc(db, `teams/${selectedTeamId}/typing`, auth.currentUser.uid)); // Remove typing status
+    await deleteDoc(
+      doc(db, `teams/${selectedTeamId}/typing`, auth.currentUser.uid)
+    ); // Remove typing status
   };
 
   // Handle Typing
   const handleTyping = async (e) => {
     setNewMessage(e.target.value);
 
-    const typingRef = doc(db, `teams/${selectedTeamId}/typing`, auth.currentUser.uid);
-    await setDoc(typingRef, { userName: auth.currentUser.displayName }, { merge: true });
+    const typingRef = doc(
+      db,
+      `teams/${selectedTeamId}/typing`,
+      auth.currentUser.uid
+    );
+    await setDoc(
+      typingRef,
+      { userName: auth.currentUser.displayName },
+      { merge: true }
+    );
 
     setTimeout(async () => {
       await deleteDoc(typingRef); // Remove typing status after 2 sec
@@ -118,25 +129,39 @@ const TeamChat = () => {
       <h1>Team Chat</h1>
 
       {/* Team Selection */}
-      <select className="options-style" onChange={(e) => setSelectedTeamId(e.target.value)} value={selectedTeamId || ""}>
-        {teams.map((team) => (
-          <option key={team.id} value={team.id}>
-            {team.name}
-          </option>
-        ))}
-      </select>
-
+      <div>
+        <select
+          className="options-style"
+          onChange={(e) => setSelectedTeamId(e.target.value)}
+          value={selectedTeamId || ""}
+        >
+          {teams.map((team) => (
+            <option key={team.id} value={team.id}>
+              {team.name}
+            </option>
+          ))}
+        </select>
+      </div>
       {/* Typing Indicator */}
-      {isTyping && <p className="typing-indicator">{typingUser} is typing...</p>}
+      {isTyping && (
+        <p className="typing-indicator">{typingUser} is typing...</p>
+      )}
 
       {/* Chat Messages */}
       <div className="chat-messages">
         {messages.map((msg) => (
-          <div key={msg.id} className={`message ${msg.senderId === auth.currentUser?.uid ? "sent" : "received"}`}>
+          <div
+            key={msg.id}
+            className={`message ${
+              msg.senderId === auth.currentUser?.uid ? "sent" : "received"
+            }`}
+          >
             <p>
               <strong>{msg.senderName}:</strong> {msg.text}
             </p>
-            {msg.senderId !== auth.currentUser?.uid && msg.read && <span className="read-receipt">✔ Read</span>}
+            {msg.senderId !== auth.currentUser?.uid && msg.read && (
+              <span className="read-receipt">✔ Read</span>
+            )}
           </div>
         ))}
       </div>
