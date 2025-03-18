@@ -1,3 +1,36 @@
+html, body {
+  overflow: hidden; /* Disable scrolling */
+  height: 100%;
+}
+
+body {
+  font-size: 14px; /* Reduce default font size */
+}
+
+.task-title {
+  font-size: 24px !important; /* Reduce title font */
+}
+
+.task p {
+  font-size: 14px;
+}
+
+.task-desc {
+  font-size: 12px;
+  color: #666;
+}
+
+.task-input button {
+  font-size: 14px;
+  padding: 8px; /* Reduce padding */
+}
+
+.delete-btn svg {
+  font-size: 20px; /* Make delete icon smaller */
+}
+
+
+
 /* Dashboard Layout */
 .dashboard {
   display: flex;
@@ -7,6 +40,7 @@
 /* Sidebar */
 .sidebar {
   width: 250px;
+  position: fixed;
   background: #14354f;
   color: white;
   padding: 20px;
@@ -52,6 +86,7 @@
   padding: 10px;
   cursor: pointer;
   border-radius: 5px;
+  margin-bottom: 30px;
 }
 
 .sidebar button:hover{
@@ -82,6 +117,7 @@
   justify-content: flex-start; /* Aligns content normally */
   padding: 20px;
   background-color: #fefff3;
+  margin-left: 250px;
 }
 
 /* Center Only the Title */
@@ -99,11 +135,14 @@
 .tasks-container {
   width: 80%;
   margin: 20px auto;
-  padding: 20px;
+  padding: 15px; /* Reduce padding */
   background: #ffffff;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
 }
+
 
 /* Title Styling */
 .task-title {
@@ -156,10 +195,26 @@
 
 /* Task List */
 .task-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  height: 40vh;
+  max-height: 50vh; 
+  overflow-y: auto; 
+  padding-right: 5px;
 }
+
+/* Custom scrollbar styling */
+.task-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.task-list::-webkit-scrollbar-thumb {
+  background: #4F959D;
+  border-radius: 5px;
+}
+
+.task-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
 
 /* Individual Task Item */
 .task {
@@ -171,6 +226,7 @@
   border-radius: 5px;
   border: 1px solid #ddd;
   transition: 0.3s;
+  margin: 10px 0;
 }
 
 /* Task Priority Colors */

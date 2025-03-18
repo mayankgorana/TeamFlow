@@ -31,21 +31,26 @@ const Tasks = () => {
     return () => unsubscribe();
   }, []);
 
-  // Fetch all teams where user is a member
-  const fetchTeams = async () => {
-    const querySnapshot = await getDocs(collection(db, "teams"));
+// Fetch all teams (both active and deleted)
+const fetchTeams = async () => {
+  const querySnapshot = await getDocs(collection(db, "teams"));
 
-    const allTeams = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+  const allTeams = querySnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
 
-    setTeams(allTeams);
+  const activeTeams = allTeams.filter(team => !team.deleted);
+  const deletedTeams = allTeams.filter(team => team.deleted);
 
-    if (allTeams.length > 0) {
-      fetchTasks(allTeams);
-    }
-  };
+  setTeams(activeTeams);
+  setDeletedTeams(deletedTeams);
+
+  if (activeTeams.length > 0) {
+    fetchTasks(activeTeams[0].id);
+  }
+};
+
 
   // Create a new team
   const createTeam = async () => {
@@ -83,6 +88,7 @@ const Tasks = () => {
     setTasks(fetchedTasks);
   };
 
+  
   // Add a new task
   const addTask = async () => {
     if (newTask.trim() === "" || description.trim() === "" || !teamId) return;
@@ -177,8 +183,10 @@ const Tasks = () => {
         </select>
         <button onClick={addTask}>Add Task</button>
       </div>
-      <hr />
       {/* Task List */}
+      <div>
+        <hr />
+      </div>
       <div className="task-list">
         {tasks.map((task, index) => {
           if (!task || !task.priority) {
