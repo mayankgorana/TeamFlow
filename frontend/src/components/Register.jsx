@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { signUp } from "../firebase/firebase";
 import { toast } from "react-toastify";
 
@@ -7,7 +6,6 @@ const Register = ({ setAuthType }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -25,7 +23,7 @@ const Register = ({ setAuthType }) => {
   };
 
   return (
-    <div className="auth-container">
+    <div className="auth-content">
       <h2>Register</h2>
       <form onSubmit={handleRegister}>
         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />

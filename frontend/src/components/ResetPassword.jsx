@@ -5,7 +5,8 @@ import { toast } from "react-toastify";
 const ResetPassword = ({ setAuthType }) => {
   const [email, setEmail] = useState("");
 
-  const handleReset = async () => {
+  const handleReset = async (e) => {
+    e.preventDefault();
     if (!email) {
       toast.error("Enter your email to reset password!");
       return;
@@ -20,10 +21,12 @@ const ResetPassword = ({ setAuthType }) => {
   };
 
   return (
-    <div className="auth-container">
+    <div className="auth-content">
       <h2>Reset Password</h2>
-      <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-      <button onClick={handleReset}>Send Reset Link</button>
+      <form onSubmit={handleReset}>
+        <input type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <button type="submit">Send Reset Link</button>
+      </form>
       <p onClick={() => setAuthType("login")} className="toggle-auth">Back to Login</p>
     </div>
   );

@@ -20,7 +20,7 @@ const Login = ({ setAuthType }) => {
   };
 
   return (
-    <div className="auth-container1">
+    <div className="auth-content">
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
