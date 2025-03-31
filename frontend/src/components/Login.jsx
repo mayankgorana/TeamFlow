@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signIn } from "../firebase/firebase";
-import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 const Login = ({ setAuthType }) => {
   const [email, setEmail] = useState("");
@@ -12,10 +12,20 @@ const Login = ({ setAuthType }) => {
     e.preventDefault();
     try {
       await signIn(email, password);
-      toast.success("Logged in successfully!");
+      Swal.fire({
+        icon: "success",
+        title: "Login Successful",
+        text: "You have successfully logged in!",
+        timer: 2000,
+        showConfirmButton: false
+      });
       navigate("/dashboard");
     } catch (error) {
-      toast.error(error.message);
+      Swal.fire({
+        icon: "error",
+        title: "Login Failed",
+        text: "Invalid email or password. Please try again.",
+      });
     }
   };
 

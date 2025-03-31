@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { signUp } from "../firebase/firebase";
-import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 const Register = ({ setAuthType }) => {
   const [email, setEmail] = useState("");
@@ -10,15 +10,27 @@ const Register = ({ setAuthType }) => {
   const handleRegister = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      toast.error("Passwords do not match!");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Passwords do not match!",
+      });
       return;
     }
     try {
       await signUp(email, password);
-      toast.success("Registered successfully! Please login.");
+      Swal.fire({
+        icon: "success",
+        title: "Success!",
+        text: "Registered successfully! Please login.",
+      });
       setAuthType("login");
     } catch (error) {
-      toast.error(error.message);
+      Swal.fire({
+        icon: "error",
+        title: "Registration Failed!",
+        text: error.message,
+      });
     }
   };
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { googleSignIn } from "../firebase/firebase";
-import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 const GoogleSignIn = () => {
   const navigate = useNavigate();
@@ -9,10 +9,18 @@ const GoogleSignIn = () => {
   const handleGoogleLogin = async () => {
     try {
       await googleSignIn();
-      toast.success("Logged in with Google!");
+      Swal.fire({
+        icon: "success",
+        title: "Success!",
+        text: "Logged in with Google!",
+      });
       navigate("/dashboard");
     } catch (error) {
-      toast.error(error.message);
+      Swal.fire({
+        icon: "error",
+        title: "Login Failed!",
+        text: error.message,
+      });
     }
   };
 
